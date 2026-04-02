@@ -27,7 +27,8 @@
       eqTreble: 0,
       cleanMode: false,
       unlockShop: false,
-      blockKeywords: ''
+      blockKeywords: '',
+    volNorm: false
     };
 
   // ─── CAPTURE ORIGINALS ───────────────────────────────────────────────────────
@@ -195,7 +196,7 @@ chrome.runtime.onMessage.addListener((msg) => {
   const audioContextMap = new WeakMap();
 
   function applyEqToVideo(videoElement) {
-    if (cfg.eq === 'normal' && !cfg.eqBass && !cfg.eqMid && !cfg.eqTreble) return;
+    if (cfg.eq === 'normal' && !cfg.eqBass && !cfg.eqMid && !cfg.eqTreble && !cfg.volNorm) return;
     if (!videoElement.hasAttribute('crossorigin')) {
         try { videoElement.crossOrigin = "anonymous"; } catch(e){}
     }
@@ -233,13 +234,21 @@ chrome.runtime.onMessage.addListener((msg) => {
         midNode.type = "peaking";
         midNode.frequency.value = 1000;
         midNode.Q.value = 1;
+        
+        const compNode = ctx.createDynamicsCompressor();
+        compNode.threshold.value = -24;
+        compNode.knee.value = 30;
+        compNode.ratio.value = 12;
+        compNode.attack.value = 0.003;
+        compNode.release.value = 0.25;
 
-        source.connect(bassNode);
+        source.connect(compNode);
+        compNode.connect(bassNode);
         bassNode.connect(midNode);
         midNode.connect(trebleNode);
         trebleNode.connect(ctx.destination);
 
-        audioContextMap.set(videoElement, { ctx, bassNode, midNode, trebleNode });
+        audioContextMap.set(videoElement, { ctx, bassNode, midNode, trebleNode, compNode });
       } catch (e) {
         // Silently ignore if AudioContext fails (e.g. InvalidStateError in background or already connected)
         // console.debug("EQ init skipped for this video element");
@@ -258,6 +267,17 @@ chrome.runtime.onMessage.addListener((msg) => {
     audioNodes.bassNode.gain.value = 0;
     audioNodes.midNode.gain.value = 0;
     audioNodes.trebleNode.gain.value = 0;
+    
+    // Toggle dynamics compressor dynamically
+    if (audioNodes.compNode) {
+        if (cfg.volNorm) {
+            audioNodes.compNode.threshold.value = -24; // Bắt đầu nén khi nguồn vượt âm lượng
+            audioNodes.compNode.ratio.value = 8;
+        } else {
+            audioNodes.compNode.threshold.value = 0; // Bypass
+            audioNodes.compNode.ratio.value = 1;
+        }
+    }
 
     switch (cfg.eq) {
       case 'bass':
@@ -588,8 +608,9 @@ function _applyAll() {
       if (s.cleanMode !== undefined) { cfg.cleanMode = s.cleanMode; _applyAll(); }
       if (s.unlockShop !== undefined) { cfg.unlockShop = s.unlockShop; _applyAll(); }
       if (s.autoScroll !== undefined) { cfg.autoScroll = s.autoScroll; _applyAll(); }
-      if (s.blockKeywords !== undefined) { cfg.blockKeywords = s.blockKeywords; _applyAll(); }
-      if (s.autoPauseAudio !== undefined) { cfg.autoPauseAudio = s.autoPauseAudio; }
+          if (s.blockKeywords !== undefined) { cfg.blockKeywords = s.blockKeywords; _applyAll(); }
+    if (s.autoPauseAudio !== undefined) { cfg.autoPauseAudio = s.autoPauseAudio; }
+    if (s.volNorm !== undefined) { cfg.volNorm = s.volNorm; _applyAll(); }
     }
   });
 

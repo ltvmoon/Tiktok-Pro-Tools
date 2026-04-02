@@ -157,18 +157,20 @@ document.addEventListener('DOMContentLoaded', () => {
       advPanel.style.display = seq.value === 'advanced' ? 'flex' : 'none';
     }
 
-    const settings = { 
-      backgroundPlay: cbg.checked, 
-      autoScroll: casc ? casc.checked : false,
-      speed: +ss.value, 
-      eq: seq ? seq.value : 'normal',
-      eqBass: sbass ? +sbass.value : 0,
-      eqMid: smid ? +smid.value : 0,
-      eqTreble: streble ? +streble.value : 0,
-      cleanMode: ccl ? ccl.checked : false,
-      unlockShop: cshop ? cshop.checked : false,
-      blockKeywords: cachedKws.join(',')
-    };
+          const settings = { 
+        backgroundPlay: cbg.checked, 
+        autoScroll: casc ? casc.checked : false,
+        speed: +ss.value, 
+        eq: seq ? seq.value : 'normal',
+        eqBass: sbass ? +sbass.value : 0,
+        eqMid: smid ? +smid.value : 0,
+        eqTreble: streble ? +streble.value : 0,
+        cleanMode: ccl ? ccl.checked : false,
+        unlockShop: cshop ? cshop.checked : false,
+        autoPause: el('c-autopause') ? el('c-autopause').checked : false,
+        volNorm: el('c-volnorm') ? el('c-volnorm').checked : false,
+        blockKeywords: cachedKws.join(',')
+      };
     chrome.storage.sync.set(settings, () => {
       if (chrome.runtime.lastError) return;
       send({type:'UPDATE_SETTINGS',settings}, undefined);
@@ -201,8 +203,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const cbg = el('c-bg'); if (cbg) cbg.addEventListener('change', apply);
   const casc = el('c-autosc'); if (casc) casc.addEventListener('change', apply);
-  const ccl = el('c-clean'); if (ccl) ccl.addEventListener('change', apply);
-  const cshop = el('c-shop'); if (cshop) cshop.addEventListener('change', apply);
+      const ccl = el('c-clean'); if (ccl) ccl.addEventListener('change', apply);
+    const cshop = el('c-shop'); if (cshop) cshop.addEventListener('change', apply);
+    const caup = el('c-autopause'); if (caup) caup.addEventListener('change', apply);
+    const cvol = el('c-volnorm'); if (cvol) cvol.addEventListener('change', apply);
   
   const seq = el('s-eq'); if (seq) seq.addEventListener('change', apply);
 
