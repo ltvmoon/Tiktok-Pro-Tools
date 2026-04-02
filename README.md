@@ -12,7 +12,7 @@ A powerful Chrome extension that enhances your TikTok web experience with essent
 - ⚡ **0-4x Video Speed**: Fine-tune playback speed from 0 to 4x, with quick presets (0.5x / 1x / 1.5x / 2x).
 - 🔊 **Volume Control**: Adjust the audio volume precisely from 0% to 100%.
 - 🎛️ **Advanced EQ & Audio Filters**: Customize your sound with presets like Bass Boost, Treble Boost, Vocal Boost, EDM, Lo-Fi, 3D Audio, and Night Mode.
--  **Custom Themes**: Personalize the extension UI with themes like Default, Dark Pro, Neon Pink, Midnight Blue, Sunset, Forest, and Custom.
+- 📥 **Media Downloader**: Easily download TikTok videos (without watermark), photos, and MP3 audio directly from the page.
 - 🧹 **Clean Mode & UI Tools**: Enhance the viewing experience by removing clutter and optimizing fonts.
 
 ---
