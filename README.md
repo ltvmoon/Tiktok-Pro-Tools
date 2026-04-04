@@ -63,4 +63,20 @@ If this extension saves your life and improves your workflow every day, please c
 
 ---
 
+## 📜 License
+
+This project is licensed under a **Custom MIT License**. 
+- **Personal Use:** Free and unrestricted.
+- **Commercial Use:** Requires a paid commercial license. Please contact the author for details.
+
+See the [LICENSE](LICENSE) file for more information.
+
+---
+
+## 🌟 Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=diepvantien/Tiktok-Pro-Tools&type=Date)](https://star-history.com/#diepvantien/Tiktok-Pro-Tools&Date)
+
+---
+
 *Made with ❤️ for TikTok power users by Diep Van Tien*
