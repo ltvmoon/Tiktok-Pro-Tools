@@ -58,23 +58,24 @@ AudioContext.prototype.createMediaElementSource = function(mediaElement) {
     const sourceNode = _realCreateMediaElementSource.call(this, mediaElement);
     
     try {
-        const bassNode = this.createBiquadFilter();
+        const audioCtx = sourceNode.context;
+        const bassNode = audioCtx.createBiquadFilter();
         bassNode.type = "lowshelf";
         bassNode.frequency.value = 250;
         bassNode.gain.value = 0;
         
-        const midNode = this.createBiquadFilter();
+        const midNode = audioCtx.createBiquadFilter();
         midNode.type = "peaking";
         midNode.frequency.value = 1000;
         midNode.Q.value = 1;
         midNode.gain.value = 0;
 
-        const trebleNode = this.createBiquadFilter();
+        const trebleNode = audioCtx.createBiquadFilter();
         trebleNode.type = "highshelf";
         trebleNode.frequency.value = 6000;
         trebleNode.gain.value = 0;
         
-        const pannerNode = this.createStereoPanner ? this.createStereoPanner() : null;
+        const pannerNode = audioCtx.createStereoPanner ? audioCtx.createStereoPanner() : null;
 
         // Create a custom shim for connect
         const realConnect = sourceNode.connect;
